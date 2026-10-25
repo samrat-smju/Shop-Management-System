@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shop Management System</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand"><span class="brand-mark">S</span><div><strong>ShopEase</strong><small>Management System</small></div></div>
+    <nav>
+      <button class="nav-link active" data-view="dashboard"><span>▦</span> Dashboard</button>
+      <button class="nav-link" data-view="products"><span>▤</span> Products & Stock</button>
+      <button class="nav-link" data-view="sales"><span>▣</span> New Sale</button>
+      <button class="nav-link" data-view="history"><span>◷</span> Sales History</button>
+    </nav>
+    <div class="sidebar-foot"><span class="status-dot"></span> Local workspace <small>Data saved in this browser</small></div>
+  </aside>
+  <main class="main">
+    <header class="topbar">
+      <div><p class="eyebrow">SHOP OPERATIONS</p><h1 id="page-title">Dashboard</h1></div>
+      <div class="top-actions"><span id="today-date" class="date-label"></span><button class="primary-btn" id="quick-sale">＋ New sale</button></div>
+    </header>
+    <section class="view active" id="view-dashboard">
+      <div class="welcome-row"><div><h2>Good day, shop owner 👋</h2><p>Here’s what’s happening in your shop today.</p></div><span class="pill">● System ready</span></div>
+      <div class="stats-grid">
+        <article class="stat-card"><div class="stat-top"><span>Total Products</span><span class="stat-icon purple">▤</span></div><strong id="stat-products">0</strong><small>Different items in inventory</small></article>
+        <article class="stat-card"><div class="stat-top"><span>Stock Units</span><span class="stat-icon blue">▦</span></div><strong id="stat-stock">0</strong><small>Total units available</small></article>
+        <article class="stat-card"><div class="stat-top"><span>Sales Revenue</span><span class="stat-icon green">৳</span></div><strong id="stat-revenue">৳0.00</strong><small>All completed sales</small></article>
+        <article class="stat-card"><div class="stat-top"><span>Low Stock Alerts</span><span class="stat-icon orange">!</span></div><strong id="stat-low">0</strong><small>Products with 5 or fewer units</small></article>
+      </div>
+      <div class="dashboard-grid">
+        <article class="panel"><div class="panel-heading"><div><h3>Recent Sales</h3><p>Your latest completed transactions</p></div><button class="text-btn" data-goto="history">View all →</button></div><div class="table-wrap"><table><thead><tr><th>Sale ID</th><th>Date</th><th>Items</th><th>Total</th></tr></thead><tbody id="recent-sales-body"></tbody></table></div></article>
+        <article class="panel"><div class="panel-heading"><div><h3>Stock Watch</h3><p>Items that need attention</p></div><button class="text-btn" data-goto="products">Manage →</button></div><div id="stock-watch" class="stock-watch"></div></article>
+      </div>
+    </section>
+    <section class="view" id="view-products">
+      <div class="section-toolbar"><div><h2>Products & Stock</h2><p>Manage your catalog, prices, and stock levels.</p></div><button class="primary-btn" id="add-product-btn">＋ Add product</button></div>
+      <div class="panel"><div class="filters"><label class="search-box">⌕ <input id="product-search" type="search" placeholder="Search product name or category..." /></label><select id="stock-filter"><option value="all">All stock levels</option><option value="low">Low stock (≤ 5)</option><option value="out">Out of stock</option></select></div>
+        <div class="table-wrap"><table><thead><tr><th>Product</th><th>Category</th><th>Price</th><th>Stock</th><th>Status</th><th>Actions</th></tr></thead><tbody id="products-body"></tbody></table></div><div id="products-empty" class="empty-state hidden">No products match your search.</div>
+      </div>
+    </section>
+    <section class="view" id="view-sales">
+      <div class="section-toolbar"><div><h2>Create a Sale</h2><p>Add products to the cart and complete the transaction.</p></div></div>
+      <div class="sale-layout">
+        <article class="panel"><div class="panel-heading"><div><h3>Available Products</h3><p>Select an item to add it to the cart</p></div></div><label class="search-box sale-search">⌕ <input id="sale-search" type="search" placeholder="Search available products..." /></label><div id="sale-products" class="sale-products"></div></article>
+        <article class="panel cart-panel"><div class="panel-heading"><div><h3>Current Cart</h3><p id="cart-count">0 items</p></div><button class="text-btn" id="clear-cart">Clear</button></div><div id="cart-items" class="cart-items"></div><div class="cart-summary"><div><span>Subtotal</span><strong id="cart-subtotal">৳0.00</strong></div><div class="total-row"><span>Total</span><strong id="cart-total">৳0.00</strong></div><button class="primary-btn full-btn" id="checkout-btn">Complete sale</button><p class="fine-print">Stock is reduced after checkout. Completed sales are saved in history.</p></div></article>
+      </div>
+    </section>
+    <section class="view" id="view-history">
+      <div class="section-toolbar"><div><h2>Sales History</h2><p>Review previous transactions and revenue.</p></div><button class="secondary-btn" id="export-sales">↓ Export CSV</button></div>
+      <div class="panel"><div class="filters"><label class="search-box">⌕ <input id="history-search" type="search" placeholder="Search sale ID or product..." /></label><span id="history-total" class="muted-label"></span></div><div class="table-wrap"><table><thead><tr><th>Sale ID</th><th>Date & Time</th><th>Items</th><th>Products</th><th>Total</th></tr></thead><tbody id="history-body"></tbody></table></div><div id="history-empty" class="empty-state hidden">No sales found yet. Your first sale will appear here.</div></div>
+    </section>
+  </main>
+  <dialog id="product-dialog">
+    <form id="product-form" method="dialog">
+      <div class="dialog-heading"><div><p class="eyebrow">INVENTORY</p><h2 id="product-dialog-title">Add product</h2></div><button type="button" class="close-btn" id="close-dialog" aria-label="Close">×</button></div>
+      <input type="hidden" id="product-id" />
+      <label>Product name<input id="product-name" required maxlength="80" placeholder="e.g. Wireless Mouse" /></label>
+      <label>Category<input id="product-category" required maxlength="50" placeholder="e.g. Electronics" /></label>
+      <div class="form-row"><label>Price (৳)<input id="product-price" required type="number" min="0.01" step="0.01" /></label><label>Stock quantity<input id="product-quantity" required type="number" min="0" step="1" /></label></div>
+      <div class="dialog-actions"><button type="button" class="secondary-btn" id="cancel-dialog">Cancel</button><button type="submit" class="primary-btn">Save product</button></div>
+    </form>
+  </dialog>
+  <div id="toast" class="toast" role="status"></div>
+  <script src="script.js"></script>
+</body>
+</html>
